@@ -1,6 +1,6 @@
 {
   "name": "@harmonixjs/core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A modern TypeScript-only Discord.js framework with decorators, database integration, and advanced handlers",
   "keywords": [
     "discord",
@@ -51,7 +51,7 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "prepublishOnly": "npm run build",
-    "postinstall": "node scripts/postinstall.js || true",
+    "postinstall": "node scripts/postinstall.js || exit 0",
     "clean": "rm -rf dist",
     "format": "prettier --write \"src/**/*.ts\""
   },
