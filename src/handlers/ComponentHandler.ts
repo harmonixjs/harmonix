@@ -21,6 +21,7 @@ function loadComponent(bot: Harmonix, dir: string) {
         }
 
         if (!file.endsWith(".js") && !file.endsWith(".ts")) return;
+        if(file.endsWith(".d.ts")) return;
 
         const ComponentClass = (await import(filePath)).default;
 
@@ -46,7 +47,7 @@ function loadComponent(bot: Harmonix, dir: string) {
             return;
         }
 
-        bot.components.set(componentOptions.id, instace);
+        bot.components.set(componentOptions.id, ComponentClass);
 
         console.log(chalk.green(`Component '${componentOptions.id}' registered.`));
     })

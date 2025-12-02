@@ -6,7 +6,7 @@
         "module": "commonjs",
         "moduleResolution": "node",
         "target": "ESNext",
-        "outDir": "Build",
+        "outDir": "dist",
         "sourceMap": false,
         "esModuleInterop": true,
         "experimentalDecorators": true,
@@ -16,9 +16,9 @@
         "skipDefaultLibCheck": true,
         "resolveJsonModule": true,
         "importHelpers": true,
-        "typeRoots": [
-            "src/Interfaces/"
-        ]
+        "declaration": true,
+        "declarationMap": true,
+        "emitDeclarationOnly": false,
     },
     "include": [
         "env.d.ts",

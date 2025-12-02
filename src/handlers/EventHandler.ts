@@ -24,6 +24,7 @@ function loadEvent(client: Harmonix, dir: string) {
         }
 
         if (!file.endsWith(".js") && !file.endsWith(".ts")) return;
+        if(file.endsWith(".d.ts")) return;
 
         const EventClass = require(filePath).default;
         const eventOn: keyof ClientEvents = Reflect.getMetadata("event:event", EventClass);

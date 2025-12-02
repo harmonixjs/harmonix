@@ -25,6 +25,7 @@ function loadCommand(bot: Harmonix, dir: string) {
         }
 
         if (!file.endsWith(".js") && !file.endsWith(".ts")) return;
+        if(file.endsWith(".d.ts")) return;
 
         const CommandClass = require(filePath).default;
 
@@ -55,7 +56,7 @@ function loadCommand(bot: Harmonix, dir: string) {
 
         types.forEach(type => {
             if (!bot.commands.has(type)) bot.commands.set(type, new Collection());
-            bot.commands.get(type)!.set(commandOptions.name, instance);
+            bot.commands.get(type)!.set(commandOptions.name, CommandClass);
         });
 
         console.log(chalk.green(`Command '${commandOptions.name}' registered.`));
@@ -63,12 +64,10 @@ function loadCommand(bot: Harmonix, dir: string) {
 }
 
 async function routing(client: Harmonix) {
-    const rest = new REST({ version: '10' }).setToken(client.token);
+    const rest = new REST({ version: '10' }).setToken(client.config.bot.token);
 
     const slashCommands = client.commands.get('slash')?.map((_, name) => {
-        const commandOptions: CommandOptions = Reflect.getMetadata(
-            "command:options",
-            _.constructor);
+        const commandOptions: CommandOptions = Reflect.getMetadata("command:options", _);
         return {
             name,
             description: commandOptions.description,
@@ -98,6 +97,6 @@ async function routing(client: Harmonix) {
         }
     } catch (error) {
         console.error('Error while routing slash commands: ', error);
-        console.dir(slashCommands, { depth: 1, colors: true });
+        // console.dir(slashCommands, { depth: 1, colors: true });
     }
 }
