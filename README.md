@@ -1,6 +1,6 @@
 # 🤖 Harmonix Framework
 
-[![npm version](https://img.shields.io/npm/v/@c1ach0/harmonix.svg)](https://www.npmjs.com/package/@c1ach0/harmonix)
+[![npm version](https://img.shields.io/npm/v/@harmonixjs/harmonix.svg)](https://www.npmjs.com/package/@harmonixjs/harmonix)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -20,7 +20,7 @@ A modern, type-safe Discord.js framework with decorators and advanced features.
 ## 📦 Installation
 
 ```bash
-npm install @c1ach0/harmonix
+npm install @harmonixjs/harmonix
 npm install --save-dev typescript
 ```
 
@@ -49,31 +49,64 @@ Update `tsconfig.json`:
 
 ```typescript
 // src/index.ts
-import { Bot } from '@c1ach0/harmonix';
+import { Harmonix, BotConfig } from "harmonix";
 
-const bot = new Bot({
-  token: process.env.TOKEN!,
-  intents: ['Guilds', 'GuildMessages']
-});
+const botConfig: BotConfig = {
+  bot: {
+    id: "YOUR_BOT_CLIENT_ID",
+    token: "YOUR_BOT_TOKEN"
+  },
+  publicApp: true,
+  folders: {
+    commands: "./src/commands",
+    events: "./src/events",
+    components: "./src/components"
+  }
+};
 
-bot.start();
+const bot = new Harmonix(botConfig);
+
+// Register a plugin
+bot.registerPlugin(...);
+
+// Start listening
+bot.login(botConfig.bot.token);
 ```
 
-### 3. Create a command
+### 3. Create a command / event / component
 
 ```typescript
-// src/commands/ping.ts
-import { Command } from '@c1ach0/harmonix';
-import { CommandInteraction } from 'discord.js';
-
+// src/commands/Ping.ts
 @Command({
-  name: 'ping',
-  description: 'Replies with Pong!'
+    name: "ping",
+    description: "Ping command",
 })
-export default class PingCommand {
-  async execute(interaction: CommandInteraction) {
-    await interaction.reply('Pong! 🏓');
-  }
+export default class PingCommand implements CommandExecutor<ChatInputCommandInteraction> {
+    execute(bot: Harmonix, ctx: CommandContext<ChatInputCommandInteraction<CacheType>>) {
+        ctx.reply("Pong!");
+    }
+}
+```
+
+```typescript
+// src/events/Ready.ts
+@Event(Events.ClientReady)
+export default class ClientReady implements EventExecutor<Events.ClientReady> {
+    execute(bot: Harmonix, client: Client<true>) {
+        bot.logger.sendLog("SUCCESS", `Bot is ready! Logged in as ${client.user.tag}`);
+    }
+}
+```
+
+```typescript
+// src/components/TestButton.ts
+@Component({
+    id: "test_button"
+})
+export default class TestButton implements ComponentExecutor<ButtonInteraction> {
+    execute(bot: Harmonix, ctx: ComponentContext<ButtonInteraction<CacheType>>) {
+        ctx.reply("Test button clicked!");
+    }
 }
 ```
 
@@ -86,21 +119,9 @@ node dist/index.js
 
 ## 📚 Documentation
 
-Visit our [documentation](https://github.com/c1ach0/harmonix/wiki) for detailed guides and API reference.
+Visit our [documentation](https://github.com/harmonixjs/harmonix/wiki) for detailed guides and API reference.
 
-## 🔌 Optional Modules
+## 🔌 Plugins (In Development..)
 
-### Database Support
+Harmonix supports first-class plugins — you can add plugins directly to the framework to register commands, events, middleware, or extend internals.
 
-```bash
-npm install quick.db
-```
-
-```typescript
-import { Bot, DatabasePlugin } from '@c1ach0/harmonix';
-
-const bot = new Bot({
-  plugins: [
-    new DatabasePlugin({ type: 'quickdb' })
-  ]
-});
