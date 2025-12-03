@@ -14,13 +14,12 @@ A modern, type-safe Discord.js framework with decorators and advanced features.
 - 🎨 **Decorator-based** commands and events
 - 📥 **Automatic imports** so you write less and code faster
 - 🔌 **Plugin system** for extensibility
-- 🚀 **Easy to use** but powerful
-- 📦 **Zero config** to get started
+- 🚀 **Easy to use** with minimal setup
 
 ## 📦 Installation
 
 ```bash
-npm install @harmonixjs/core tsx
+npm install @harmonixjs/core tsx discord.js
 npm install --save-dev typescript
 ```
 
@@ -51,9 +50,9 @@ Update `tsconfig.json`:
 
 ```typescript
 // src/index.ts
-import { Harmonix, BotConfig } from "@harmonixjs/core";
+import { Harmonix } from "@harmonixjs/core";
 
-const botConfig: BotConfig = {
+const bot = new Harmonix({
   bot: {
     id: "YOUR_BOT_CLIENT_ID",
     token: "YOUR_BOT_TOKEN"
@@ -65,12 +64,10 @@ const botConfig: BotConfig = {
     components: "./src/components"
   },
   intents: [3249151]
-};
-
-const bot = new Harmonix(botConfig);
+});
 
 // Register a plugin
-bot.registerPlugin(...);
+bot.use(...);
 
 // Start listening
 bot.login(botConfig.bot.token);
@@ -123,7 +120,10 @@ npx tsx src/index.ts
 
 <!-- Visit our [documentation](https://github.com/harmonixjs/core/wiki) for detailed guides and API reference. -->
 
-## 🔌 Plugins (In Development..)
+## 🔌 Plugins
 
 Harmonix supports first-class plugins — you can add plugins directly to the framework to register commands, events, middleware, or extend internals.
 
+- **[@harmonixjs/quick-db](https://www.npmjs.com/package/@harmonixjs/quick-db)**: Simple and flexible Quick.db plugin for Harmonix Discord framework.
+- **[@harmonixjs/express](https://www.npmjs.com/package/@harmonixjs/express)**: A powerful Express-based HTTP API plugin for the Harmonix Discord framework.
+- **[@harmonixjs/image-builder](#plugins)**: Development..
